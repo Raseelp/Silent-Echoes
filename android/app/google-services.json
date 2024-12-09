@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "881121456927",
+    "project_id": "silent-echoes-95e76",
+    "storage_bucket": "silent-echoes-95e76.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:881121456927:android:dad7f56fcf7c4b1986b62a",
+        "android_client_info": {
+          "package_name": "com.example.silent_echoes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9Z46k2dJLS3RYND8IBDRKTaflEgJMy3c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
