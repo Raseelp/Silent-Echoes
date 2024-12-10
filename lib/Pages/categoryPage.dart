@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:silent_echoes/Pages/messageFeedPage.dart';
+import 'package:silent_echoes/Widgets/last_message_card.dart';
 import 'package:silent_echoes/util/appColors.dart';
 
 class CategoryPage extends StatefulWidget {
@@ -239,11 +240,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600),
                           ),
-                          Text('dsdhsjd'),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [Text('Date And Time')],
-                          )
+                          LastMessageCard(category: widget.category),
                         ],
                       ),
                     )
@@ -256,30 +253,40 @@ class _CategoryPageState extends State<CategoryPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Container(
-                    width: screenWidth * 0.35,
-                    constraints: BoxConstraints(
-                      minHeight: screenHeight * 0.1,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.7),
-                      borderRadius: BorderRadius.circular(22),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 20,
-                          offset: const Offset(0, 4),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                MessageFeedPage(category: widget.category),
+                          ));
+                    },
+                    child: Container(
+                      width: screenWidth * 0.35,
+                      constraints: BoxConstraints(
+                        minHeight: screenHeight * 0.1,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.7),
+                        borderRadius: BorderRadius.circular(22),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 20,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Text(
+                          textAlign: TextAlign.center,
+                          getReadMessageButtonText(widget.category),
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600),
                         ),
-                      ],
-                    ),
-                    child: Center(
-                      child: Text(
-                        textAlign: TextAlign.center,
-                        getReadMessageButtonText(widget.category),
-                        style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600),
                       ),
                     ),
                   ),

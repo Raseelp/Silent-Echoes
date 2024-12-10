@@ -78,13 +78,13 @@ Widget buildCategoryBox(BuildContext context, String category, Color color,
                 Colors.white,
                 BlendMode.srcIn,
               ),
-              placeholderBuilder: (BuildContext context) => Container(
-                width: screenWidth * 0.25,
-                height: screenWidth * 0.25,
-                child: const Center(
-                  child: Text('SVG Load Error'),
-                ),
-              ),
+              // placeholderBuilder: (BuildContext context) => Container(
+              //   width: screenWidth * 0.25,
+              //   height: screenWidth * 0.25,
+              //   child: const Center(
+              //     child: Text('SVG Load Error'),
+              //   ),
+              // ),
             ),
           ),
         ),
