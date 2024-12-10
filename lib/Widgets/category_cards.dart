@@ -40,13 +40,19 @@ Widget buildCategoryBox(BuildContext context, String category, Color color,
 
   return GestureDetector(
     onTap: () {
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-          builder: (context) => CategoryPage(
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => CategoryPage(
             category: category,
             categoryColor: color,
           ),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
         ),
       );
     },

@@ -168,14 +168,23 @@ class _HomePageState extends State<HomePage>
                 position: _slideAnimation3,
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => FullScreenPage(
-                              initialQuote: _quote,
-                              initialAuthor: _author,
-                              initialImageUrl: _imagePath),
-                        ));
+                    Navigator.pushReplacement(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            FullScreenPage(
+                                initialQuote: _quote,
+                                initialAuthor: _author,
+                                initialImageUrl: _imagePath),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -203,8 +212,8 @@ class _HomePageState extends State<HomePage>
                               begin: Alignment.center,
                               end: Alignment.topCenter,
                               colors: [
-                                Colors.black.withOpacity(0.5),
-                                Colors.transparent,
+                                Colors.lightBlue.withOpacity(0.2),
+                                Colors.lightBlue.withOpacity(0.2),
                               ],
                             ),
                           ),

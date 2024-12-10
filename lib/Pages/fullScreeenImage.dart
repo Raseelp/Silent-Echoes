@@ -5,6 +5,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:silent_echoes/Pages/homePage.dart';
+
 // Full-screen page to display the quote and image in full screen
 class FullScreenPage extends StatefulWidget {
   final String initialQuote;
@@ -31,6 +33,7 @@ class _FullScreenPageState extends State<FullScreenPage>
   late Animation<double> _fadeInAnimation;
   late AnimationController _controller;
 
+  @override
   void initState() {
     super.initState();
     quote = widget.initialQuote;
@@ -122,107 +125,138 @@ class _FullScreenPageState extends State<FullScreenPage>
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Stack(
-        children: [
-          FadeTransition(
-            opacity: _fadeInAnimation,
-            child: Image.asset(
-              imageUrl,
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: double.infinity,
-            ),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) => HomePage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            },
           ),
-          FadeTransition(
-            opacity: _fadeInAnimation,
-            child: Container(
-              color: Colors.black.withOpacity(0.5), // Dark overlay
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '"$quote"',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.8),
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          shadows: [
-                            Shadow(
-                              offset: const Offset(0, 2),
-                              blurRadius: 3.0,
-                              color: Colors.black.withOpacity(0.7),
-                            ),
-                          ],
+        );
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: Stack(
+          children: [
+            FadeTransition(
+              opacity: _fadeInAnimation,
+              child: Image.asset(
+                imageUrl,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+              ),
+            ),
+            FadeTransition(
+              opacity: _fadeInAnimation,
+              child: Container(
+                color: Colors.black.withOpacity(0.5), // Dark overlay
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '"$quote"',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.8),
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            shadows: [
+                              Shadow(
+                                offset: const Offset(0, 2),
+                                blurRadius: 3.0,
+                                color: Colors.black.withOpacity(0.7),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      Text(
-                        '-$author-',
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.5),
-                          fontSize: 18,
+                        const SizedBox(height: 20),
+                        Text(
+                          '-$author-',
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.5),
+                            fontSize: 18,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          Positioned(
-            left: 20,
-            bottom: 20,
-            width: screenWidth * 0.65,
-            height: screenHeight * 0.07,
-            child: GestureDetector(
-              onTap: () {
-                _fetchQuote();
-                _changeImageWithFade();
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(15)),
-                child: Center(
-                    child: Text(
-                  'Next',
-                  style: TextStyle(
-                      fontSize: 20, color: Colors.white.withOpacity(0.5)),
-                )),
+            Positioned(
+              left: 20,
+              bottom: 20,
+              width: screenWidth * 0.65,
+              height: screenHeight * 0.07,
+              child: GestureDetector(
+                onTap: () {
+                  _fetchQuote();
+                  _changeImageWithFade();
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(15)),
+                  child: Center(
+                      child: Text(
+                    'Next',
+                    style: TextStyle(
+                        fontSize: 20, color: Colors.white.withOpacity(0.5)),
+                  )),
+                ),
               ),
             ),
-          ),
-          Positioned(
-            right: 20,
-            bottom: 20,
-            width: screenWidth * 0.15,
-            height: screenHeight * 0.07,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(15)),
-                child: Center(
-                  child: SvgPicture.asset(
-                    'assets/images/expand.svg',
-                    color: Colors.white.withOpacity(0.5),
-                    height: 25,
-                    width: 25,
+            Positioned(
+              right: 20,
+              bottom: 20,
+              width: screenWidth * 0.15,
+              height: screenHeight * 0.07,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          HomePage(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        );
+                      },
+                    ),
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(15)),
+                  child: Center(
+                    child: SvgPicture.asset(
+                      'assets/images/expand.svg',
+                      color: Colors.white.withOpacity(0.5),
+                      height: 25,
+                      width: 25,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
