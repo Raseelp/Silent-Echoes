@@ -1,10 +1,10 @@
-import 'dart:math';
-
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:silent_echoes/Pages/messageFeedPage.dart';
 import 'package:silent_echoes/Widgets/last_message_card.dart';
 import 'package:silent_echoes/util/appColors.dart';
+import 'package:silent_echoes/util/snackbars.dart';
 
 class CategoryPage extends StatefulWidget {
   final String category;
@@ -17,6 +17,8 @@ class CategoryPage extends StatefulWidget {
 }
 
 class _CategoryPageState extends State<CategoryPage> {
+  Snackbars _snackbars = Snackbars();
+
   final TextEditingController _messageController = TextEditingController();
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -33,24 +35,21 @@ class _CategoryPageState extends State<CategoryPage> {
       _messageController.clear();
 
       // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Message saved successfully!')),
-      );
+      _snackbars.showSuccessSnackBar(context, 'Thought Released!',
+          'Your voice has joined others in this safe space.');
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => MessageFeedPage(
             category: widget.category,
+            categoryColor: widget.categoryColor,
           ),
         ),
       );
     } catch (e) {
       // Show error message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error saving message: $e'),
-        ),
-      );
+      _snackbars.showFailSnackBar(context, 'Oops! Try Again!',
+          'We couldn\'t send your message. Please try again.');
     }
   }
 
@@ -260,8 +259,10 @@ class _CategoryPageState extends State<CategoryPage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                MessageFeedPage(category: widget.category),
+                            builder: (context) => MessageFeedPage(
+                              category: widget.category,
+                              categoryColor: widget.categoryColor,
+                            ),
                           ));
                     },
                     child: Container(
@@ -342,10 +343,10 @@ class _CategoryPageState extends State<CategoryPage> {
                 ),
                 child: Column(
                   children: [
-                    TextField(in
+                    TextField(
                       style: const TextStyle(color: Colors.white),
                       controller: _messageController,
-                      decoration: InputDecoration(contentPadding: EdgeInsets.zero,
+                      decoration: InputDecoration(
                         filled: false,
                         hintText: getHintText(widget.category),
                         border: InputBorder.none,
