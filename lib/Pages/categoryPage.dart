@@ -59,6 +59,8 @@ class _CategoryPageState extends State<CategoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     String getTitleText(String category) {
       String titleText = '';
       switch (category.trim()) {
@@ -74,8 +76,83 @@ class _CategoryPageState extends State<CategoryPage> {
         default:
           titleText = 'Secret Desire?';
       }
-      print('Attempting to get title from category: $titleText'); // Debug print
       return titleText;
+    }
+
+    String getConfortText(String category) {
+      String confortText = '';
+      switch (category.trim()) {
+        case 'Anxiety':
+          confortText =
+              'A private corner to share your worries, no names attached.';
+          break;
+        case 'Apologies':
+          confortText =
+              'Everyone makes mistakes,Share your apologies, no identity, just sincerity';
+          break;
+        case 'Happiness':
+          confortText =
+              'Express your joy and brighten someone’s day, all anonymously.';
+          break;
+        default:
+          confortText =
+              'A safe space to whisper your deepest desires, no judgment.';
+      }
+      return confortText;
+    }
+
+    String getLastMsgHeadingText(String category) {
+      String LastmsgHeadingText = '';
+      switch (category.trim()) {
+        case 'Anxiety':
+          LastmsgHeadingText = 'Last Person Was Worried About:';
+          break;
+        case 'Apologies':
+          LastmsgHeadingText = 'Last Person Was Sorry For:';
+          break;
+        case 'Happiness':
+          LastmsgHeadingText = 'Last Person Was Happy That:';
+          break;
+        default:
+          LastmsgHeadingText = 'Last Person Wished For:';
+      }
+      return LastmsgHeadingText;
+    }
+
+    String getReadMessageButtonText(String category) {
+      String ReadMessageButtonText = '';
+      switch (category.trim()) {
+        case 'Anxiety':
+          ReadMessageButtonText = 'Read Other’s Worries';
+          break;
+        case 'Apologies':
+          ReadMessageButtonText = 'Read Other’s Regrets';
+          break;
+        case 'Happiness':
+          ReadMessageButtonText = 'Read Other’s Smiles';
+          break;
+        default:
+          ReadMessageButtonText = 'Read Other’s Dreams';
+      }
+      return ReadMessageButtonText;
+    }
+
+    String getHintText(String category) {
+      String HintText = '';
+      switch (category.trim()) {
+        case 'Anxiety':
+          HintText = '   I\'m worried about...';
+          break;
+        case 'Apologies':
+          HintText = '  I wanna say sorry for...';
+          break;
+        case 'Happiness':
+          HintText = '  Something that made me smile today...';
+          break;
+        default:
+          HintText = '  I wish for...';
+      }
+      return HintText;
     }
 
     return Scaffold(
@@ -97,33 +174,204 @@ class _CategoryPageState extends State<CategoryPage> {
       backgroundColor: widget.categoryColor,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _messageController,
-              decoration: const InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                hintText: 'Enter your message...',
-                border: OutlineInputBorder(),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: double.infinity,
+                constraints: BoxConstraints(
+                  minHeight: screenHeight * 0.3,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(22),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    const Text(
+                      textAlign: TextAlign.center,
+                      'You\’re Not               Alone',
+                      style: TextStyle(
+                          color: AppColors.background,
+                          fontSize: 36,
+                          fontWeight: FontWeight.w800),
+                    ),
+                    Text(
+                      textAlign: TextAlign.center,
+                      getConfortText(widget.category),
+                      style: const TextStyle(
+                          color: AppColors.background,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      constraints: BoxConstraints(
+                        minHeight: screenHeight * 0.1,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(17),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            getLastMsgHeadingText(widget.category),
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          Text('dsdhsjd'),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [Text('Date And Time')],
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
-              maxLines: 4,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _saveMessage,
-              style: ElevatedButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                backgroundColor: Colors.white,
+              SizedBox(
+                height: screenHeight * 0.02,
               ),
-              child: const Text(
-                'Let The Worries Go...',
-                style: TextStyle(color: Colors.black),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    width: screenWidth * 0.35,
+                    constraints: BoxConstraints(
+                      minHeight: screenHeight * 0.1,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.7),
+                      borderRadius: BorderRadius.circular(22),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 20,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Text(
+                        textAlign: TextAlign.center,
+                        getReadMessageButtonText(widget.category),
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: screenWidth * 0.35,
+                    constraints: BoxConstraints(
+                      minHeight: screenHeight * 0.1,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.7),
+                      borderRadius: BorderRadius.circular(22),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 20,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: const Center(
+                      child: Text(
+                        textAlign: TextAlign.center,
+                        'About Us',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  )
+                ],
               ),
-            )
-          ],
+              SizedBox(
+                height: screenHeight * 0.15,
+              ),
+              Container(
+                width: double.infinity,
+                constraints: BoxConstraints(
+                  minHeight: screenHeight * 0.1,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(22),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: _messageController,
+                      decoration: InputDecoration(
+                        filled: false,
+                        hintText: getHintText(widget.category),
+                        border: InputBorder.none,
+                      ),
+                      maxLines: 6,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ElevatedButton(
+                            onPressed: _saveMessage,
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
+                              backgroundColor: Colors.white,
+                            ),
+                            child: const Text(
+                              'Let The Worries Go...',
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 15),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );
