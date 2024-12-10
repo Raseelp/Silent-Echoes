@@ -40,13 +40,19 @@ class _CategoryPageState extends State<CategoryPage> {
       // Show success message
       _snackbars.showSuccessSnackBar(context, 'Thought Released!',
           'Your voice has joined others in this safe space.');
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-          builder: (context) => MessageFeedPage(
-            category: widget.category,
-            categoryColor: widget.categoryColor,
-          ),
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              MessageFeedPage(
+                  category: widget.category,
+                  categoryColor: widget.categoryColor),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
         ),
       );
     } catch (e) {
@@ -279,14 +285,23 @@ class _CategoryPageState extends State<CategoryPage> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MessageFeedPage(
-                                category: widget.category,
-                                categoryColor: widget.categoryColor,
-                              ),
-                            ));
+                        Navigator.pushReplacement(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation,
+                                    secondaryAnimation) =>
+                                MessageFeedPage(
+                                    category: widget.category,
+                                    categoryColor: widget.categoryColor),
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              );
+                            },
+                          ),
+                        );
                       },
                       child: Container(
                         width: screenWidth * 0.35,
@@ -318,12 +333,24 @@ class _CategoryPageState extends State<CategoryPage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  AboutUs(categoryColor: widget.categoryColor),
-                            ));
+                        Navigator.pushReplacement(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    AboutUs(
+                              categoryColor: widget.categoryColor,
+                              category: widget.category,
+                            ),
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              );
+                            },
+                          ),
+                        );
                       },
                       child: Container(
                         width: screenWidth * 0.35,
