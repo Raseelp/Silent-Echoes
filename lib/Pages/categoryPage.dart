@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:silent_echoes/Pages/messageFeedPage.dart';
@@ -106,16 +108,16 @@ class _CategoryPageState extends State<CategoryPage> {
       String LastmsgHeadingText = '';
       switch (category.trim()) {
         case 'Anxiety':
-          LastmsgHeadingText = 'Last Person Was Worried About:';
+          LastmsgHeadingText = '  Last Person Was Worried About:';
           break;
         case 'Apologies':
-          LastmsgHeadingText = 'Last Person Was Sorry For:';
+          LastmsgHeadingText = '  Last Person Was Sorry For:';
           break;
         case 'Happiness':
-          LastmsgHeadingText = 'Last Person Was Happy That:';
+          LastmsgHeadingText = '  Last Person Was Happy That:';
           break;
         default:
-          LastmsgHeadingText = 'Last Person Wished For:';
+          LastmsgHeadingText = '  Last Person Wished For:';
       }
       return LastmsgHeadingText;
     }
@@ -148,7 +150,7 @@ class _CategoryPageState extends State<CategoryPage> {
           HintText = '  I wanna say sorry for...';
           break;
         case 'Happiness':
-          HintText = '  Something that made me smile today...';
+          HintText = '  Something that made You smile today...';
           break;
         default:
           HintText = '  I wish for...';
@@ -231,14 +233,14 @@ class _CategoryPageState extends State<CategoryPage> {
                         ],
                       ),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             getLastMsgHeadingText(widget.category),
                             style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 15,
-                                fontWeight: FontWeight.w600),
+                                fontWeight: FontWeight.w500),
                           ),
                           LastMessageCard(category: widget.category),
                         ],
@@ -340,9 +342,10 @@ class _CategoryPageState extends State<CategoryPage> {
                 ),
                 child: Column(
                   children: [
-                    TextField(
+                    TextField(in
+                      style: const TextStyle(color: Colors.white),
                       controller: _messageController,
-                      decoration: InputDecoration(
+                      decoration: InputDecoration(contentPadding: EdgeInsets.zero,
                         filled: false,
                         hintText: getHintText(widget.category),
                         border: InputBorder.none,
@@ -358,16 +361,18 @@ class _CategoryPageState extends State<CategoryPage> {
                             onPressed: _saveMessage,
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
+                                borderRadius: BorderRadius.circular(13),
                               ),
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 10),
-                              backgroundColor: Colors.white,
+                              backgroundColor: widget.categoryColor,
                             ),
                             child: const Text(
-                              'Let The Worries Go...',
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 15),
+                              'Let It Flow...',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15),
                             ),
                           ),
                         ),
