@@ -201,7 +201,7 @@ class _CategoryPageState extends State<CategoryPage> {
                   children: [
                     const Text(
                       textAlign: TextAlign.center,
-                      'You\’re Not               Alone',
+                      'You\’re Not                           Alone',
                       style: TextStyle(
                           color: AppColors.background,
                           fontSize: 36,
@@ -214,6 +214,9 @@ class _CategoryPageState extends State<CategoryPage> {
                           color: AppColors.background,
                           fontSize: 20,
                           fontWeight: FontWeight.w500),
+                    ),
+                    SizedBox(
+                      height: screenHeight * 0.02,
                     ),
                     Container(
                       width: double.infinity,
@@ -323,7 +326,7 @@ class _CategoryPageState extends State<CategoryPage> {
                 ],
               ),
               SizedBox(
-                height: screenHeight * 0.15,
+                height: screenHeight * 0.13,
               ),
               Container(
                 width: double.infinity,
@@ -343,15 +346,18 @@ class _CategoryPageState extends State<CategoryPage> {
                 ),
                 child: Column(
                   children: [
-                    TextField(
-                      style: const TextStyle(color: Colors.white),
-                      controller: _messageController,
-                      decoration: InputDecoration(
-                        filled: false,
-                        hintText: getHintText(widget.category),
-                        border: InputBorder.none,
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        style: const TextStyle(color: Colors.white),
+                        controller: _messageController,
+                        decoration: InputDecoration(
+                          filled: false,
+                          hintText: getHintText(widget.category),
+                          border: InputBorder.none,
+                        ),
+                        maxLines: 6,
                       ),
-                      maxLines: 6,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,

@@ -38,6 +38,7 @@ dependencies:
   cloud_firestore: ^5.5.1
   flutter_svg: ^2.0.16
   awesome_snackbar_content: ^0.1.4
+  http: ^1.2.2
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +67,7 @@ flutter:
     - assets/images/joy.svg
     - assets/images/sorry.svg
     - assets/images/wish.svg
+    - assets/images/img1.jpeg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
