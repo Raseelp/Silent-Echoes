@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:silent_echoes/Pages/messageFeedPage.dart';
+import 'package:silent_echoes/util/appColors.dart';
 
 class CategoryPage extends StatefulWidget {
   final String category;
@@ -41,7 +42,6 @@ class _CategoryPageState extends State<CategoryPage> {
         ),
       );
     } catch (e) {
-      print(e);
       // Show error message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -59,7 +59,41 @@ class _CategoryPageState extends State<CategoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    String getTitleText(String category) {
+      String titleText = '';
+      switch (category.trim()) {
+        case 'Anxiety':
+          titleText = 'Heavy Mind?';
+          break;
+        case 'Apologies':
+          titleText = 'Feeling Sorry?';
+          break;
+        case 'Happiness':
+          titleText = 'Joy to Share?';
+          break;
+        default:
+          titleText = 'Secret Desire?';
+      }
+      print('Attempting to get title from category: $titleText'); // Debug print
+      return titleText;
+    }
+
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: widget.categoryColor,
+        title: Center(
+          child: Text(
+            getTitleText(
+              widget.category,
+            ),
+            style: const TextStyle(
+                color: AppColors.background,
+                fontSize: 32,
+                fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
       backgroundColor: widget.categoryColor,
       body: Padding(
         padding: const EdgeInsets.all(16.0),

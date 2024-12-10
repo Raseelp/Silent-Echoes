@@ -15,7 +15,8 @@ class SilentEchoes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomePage(),
+      theme: ThemeData(fontFamily: 'poppins'),
+      home: const HomePage(),
     );
   }
 }
