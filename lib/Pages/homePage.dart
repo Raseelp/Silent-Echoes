@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:silent_echoes/Pages/categoryPage.dart';
+import 'package:silent_echoes/Pages/fullScreeenImage.dart';
 import 'package:silent_echoes/Widgets/category_cards.dart';
 import 'package:silent_echoes/util/appColors.dart';
 import 'dart:convert'; // For json decoding
@@ -108,7 +109,16 @@ class _HomePageState extends State<HomePage> {
               height: screenHeight * 0.02,
             ),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FullScreenPage(
+                          initialQuote: _quote,
+                          initialAuthor: _author,
+                          initialImageUrl: _imagePath),
+                    ));
+              },
               child: Container(
                 decoration: BoxDecoration(
                     boxShadow: [
