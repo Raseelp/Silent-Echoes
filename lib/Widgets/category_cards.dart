@@ -34,7 +34,7 @@ Widget buildCategoryBox(BuildContext context, String category, Color color,
       default:
         path = 'assets/images/wish.svg';
     }
-    print('Attempting to load SVG from path: $path'); // Debug print
+
     return path;
   }
 

@@ -116,7 +116,7 @@ class _FullScreenPageState extends State<FullScreenPage> {
                       '"$quote"',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.white.withOpacity(0.8),
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
                         shadows: [
@@ -131,8 +131,8 @@ class _FullScreenPageState extends State<FullScreenPage> {
                     const SizedBox(height: 20),
                     Text(
                       '-$author-',
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.5),
                         fontSize: 18,
                       ),
                     ),

@@ -1,6 +1,7 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:silent_echoes/Pages/aboutUs.dart';
 import 'package:silent_echoes/Pages/messageFeedPage.dart';
 import 'package:silent_echoes/Widgets/last_message_card.dart';
 import 'package:silent_echoes/util/appColors.dart';
@@ -20,6 +21,7 @@ class _CategoryPageState extends State<CategoryPage> {
   Snackbars _snackbars = Snackbars();
 
   final TextEditingController _messageController = TextEditingController();
+  final int _maxCharacters = 300;
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Future<void> _saveMessage() async {
@@ -296,37 +298,47 @@ class _CategoryPageState extends State<CategoryPage> {
                       ),
                     ),
                   ),
-                  Container(
-                    width: screenWidth * 0.35,
-                    constraints: BoxConstraints(
-                      minHeight: screenHeight * 0.1,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.7),
-                      borderRadius: BorderRadius.circular(22),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 20,
-                          offset: const Offset(0, 4),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                AboutUs(categoryColor: widget.categoryColor),
+                          ));
+                    },
+                    child: Container(
+                      width: screenWidth * 0.35,
+                      constraints: BoxConstraints(
+                        minHeight: screenHeight * 0.1,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.7),
+                        borderRadius: BorderRadius.circular(22),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 20,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: const Center(
+                        child: Text(
+                          textAlign: TextAlign.center,
+                          'About Us',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600),
                         ),
-                      ],
-                    ),
-                    child: const Center(
-                      child: Text(
-                        textAlign: TextAlign.center,
-                        'About Us',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600),
                       ),
                     ),
                   )
                 ],
               ),
               SizedBox(
-                height: screenHeight * 0.13,
+                height: screenHeight * 0.08,
               ),
               Container(
                 width: double.infinity,
@@ -351,7 +363,9 @@ class _CategoryPageState extends State<CategoryPage> {
                       child: TextField(
                         style: const TextStyle(color: Colors.white),
                         controller: _messageController,
+                        maxLength: _maxCharacters,
                         decoration: InputDecoration(
+                          counterStyle: const TextStyle(fontSize: 15),
                           filled: false,
                           hintText: getHintText(widget.category),
                           border: InputBorder.none,
