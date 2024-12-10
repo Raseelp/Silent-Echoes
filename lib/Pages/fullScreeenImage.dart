@@ -22,11 +22,14 @@ class FullScreenPage extends StatefulWidget {
   State<FullScreenPage> createState() => _FullScreenPageState();
 }
 
-class _FullScreenPageState extends State<FullScreenPage> {
+class _FullScreenPageState extends State<FullScreenPage>
+    with SingleTickerProviderStateMixin {
   String quote = '';
   String author = '';
   String imageUrl = '';
   late Timer _timer;
+  late Animation<double> _fadeInAnimation;
+  late AnimationController _controller;
 
   void initState() {
     super.initState();
@@ -35,8 +38,25 @@ class _FullScreenPageState extends State<FullScreenPage> {
     imageUrl = widget.initialImageUrl;
     _timer = Timer.periodic(const Duration(seconds: 8), (Timer t) {
       _fetchQuote();
-      imageUrl = _getRandomImage();
+      _changeImageWithFade();
     });
+
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    );
+
+    _fadeInAnimation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
+    );
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _timer.cancel();
+    super.dispose();
   }
 
   Future<void> _fetchQuote() async {
@@ -73,6 +93,14 @@ class _FullScreenPageState extends State<FullScreenPage> {
     }
   }
 
+  void _changeImageWithFade() {
+    // Restart fade animation and update the image
+    _controller.forward(from: 0); // Restart the fade animation
+    setState(() {
+      imageUrl = _getRandomImage();
+    });
+  }
+
   String _getRandomImage() {
     // You can modify this list of images based on your preference
     List<String> images = [
@@ -98,45 +126,51 @@ class _FullScreenPageState extends State<FullScreenPage> {
       backgroundColor: Colors.black,
       body: Stack(
         children: [
-          Image.asset(
-            imageUrl,
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: double.infinity,
+          FadeTransition(
+            opacity: _fadeInAnimation,
+            child: Image.asset(
+              imageUrl,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
+            ),
           ),
-          Container(
-            color: Colors.black.withOpacity(0.5), // Dark overlay
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      '"$quote"',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.8),
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        shadows: [
-                          Shadow(
-                            offset: const Offset(0, 2),
-                            blurRadius: 3.0,
-                            color: Colors.black.withOpacity(0.7),
-                          ),
-                        ],
+          FadeTransition(
+            opacity: _fadeInAnimation,
+            child: Container(
+              color: Colors.black.withOpacity(0.5), // Dark overlay
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '"$quote"',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.8),
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          shadows: [
+                            Shadow(
+                              offset: const Offset(0, 2),
+                              blurRadius: 3.0,
+                              color: Colors.black.withOpacity(0.7),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    Text(
-                      '-$author-',
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.5),
-                        fontSize: 18,
+                      const SizedBox(height: 20),
+                      Text(
+                        '-$author-',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.5),
+                          fontSize: 18,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -149,7 +183,7 @@ class _FullScreenPageState extends State<FullScreenPage> {
             child: GestureDetector(
               onTap: () {
                 _fetchQuote();
-                imageUrl = _getRandomImage();
+                _changeImageWithFade();
               },
               child: Container(
                 decoration: BoxDecoration(

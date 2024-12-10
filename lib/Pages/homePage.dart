@@ -17,11 +17,19 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   String _quote = '"Loading inspirational quote..."';
   String _author = '-Fetching Author-';
   String _imagePath = 'assets/images/img1.jpeg';
   late Timer _timer;
+
+  // Animation variables
+  late AnimationController _controller;
+  late Animation<Offset> _slideAnimation1;
+  late Animation<Offset> _slideAnimation2;
+  late Animation<Offset> _slideAnimation3;
+  late Animation<double> _fadeAnimation;
 
   @override
   void initState() {
@@ -31,6 +39,52 @@ class _HomePageState extends State<HomePage> {
       _fetchQuote();
       _imagePath = _getRandomImage();
     });
+
+    // Initialize AnimationController
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    );
+
+    // Define a fade animation (opacity from 0 to 1)
+    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
+    );
+
+    // Define animations for sliding in containers
+    _slideAnimation1 = Tween<Offset>(
+      begin: const Offset(-0.5, 0), // Slide in from the left
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+
+    _slideAnimation2 = Tween<Offset>(
+      begin: const Offset(0.5, 0), // Slide in from the right
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+
+    _slideAnimation3 = Tween<Offset>(
+      begin: const Offset(0, -0.5), // Slide in from the above
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+
+    // Start the animation
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _timer.cancel();
+    super.dispose();
   }
 
   Future<void> _fetchQuote() async {
@@ -108,110 +162,116 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: screenHeight * 0.02,
             ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => FullScreenPage(
-                          initialQuote: _quote,
-                          initialAuthor: _author,
-                          initialImageUrl: _imagePath),
-                    ));
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
-                        blurRadius: 10.0,
-                        offset: const Offset(4, 4),
-                      ),
-                    ],
-                    color: AppColors.darkGray,
-                    borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
-                      image: AssetImage(_imagePath),
-                      fit: BoxFit.cover,
-                    )),
-                height: screenHeight * 0.25,
-                width: screenWidth * 0.9,
-                child: Stack(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        gradient: LinearGradient(
-                          begin: Alignment.center,
-                          end: Alignment.topCenter,
-                          colors: [
-                            Colors.black.withOpacity(0.5),
-                            Colors.transparent,
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Center(
-                            child: Text(
-                              textAlign: TextAlign.center,
-                              '"$_quote"',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                shadows: [
-                                  Shadow(
-                                    offset: Offset(0, 2),
-                                    blurRadius: 3.0,
-                                    color: Color.fromARGB(150, 0, 0, 0),
-                                  ),
-                                ],
-                              ),
-                            ),
+            FadeTransition(
+              opacity: _fadeAnimation,
+              child: SlideTransition(
+                position: _slideAnimation3,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FullScreenPage(
+                              initialQuote: _quote,
+                              initialAuthor: _author,
+                              initialImageUrl: _imagePath),
+                        ));
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.3),
+                            blurRadius: 10.0,
+                            offset: const Offset(4, 4),
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '-$_author-',
-                            style: const TextStyle(
-                              color: Colors.white70,
-                              fontSize: 16,
-                              shadows: [
-                                Shadow(
-                                  offset: Offset(0, 1),
-                                  blurRadius: 2.0,
-                                  color: Color.fromARGB(150, 0, 0, 0),
-                                ),
+                        ],
+                        color: AppColors.darkGray,
+                        borderRadius: BorderRadius.circular(20),
+                        image: DecorationImage(
+                          image: AssetImage(_imagePath),
+                          fit: BoxFit.cover,
+                        )),
+                    height: screenHeight * 0.25,
+                    width: screenWidth * 0.9,
+                    child: Stack(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            gradient: LinearGradient(
+                              begin: Alignment.center,
+                              end: Alignment.topCenter,
+                              colors: [
+                                Colors.black.withOpacity(0.5),
+                                Colors.transparent,
                               ],
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                      right: 10,
-                      bottom: 10,
-                      width: screenWidth * 0.1,
-                      height: screenHeight * 0.05,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(15)),
-                        child: Center(
-                          child: SvgPicture.asset(
-                            'assets/images/expand.svg',
-                            color: Colors.white.withOpacity(0.5),
-                            height: 25,
-                            width: 25,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(
+                                child: Text(
+                                  textAlign: TextAlign.center,
+                                  '"$_quote"',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    shadows: [
+                                      Shadow(
+                                        offset: Offset(0, 2),
+                                        blurRadius: 3.0,
+                                        color: Color.fromARGB(150, 0, 0, 0),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                '-$_author-',
+                                style: const TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 16,
+                                  shadows: [
+                                    Shadow(
+                                      offset: Offset(0, 1),
+                                      blurRadius: 2.0,
+                                      color: Color.fromARGB(150, 0, 0, 0),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ),
+                        Positioned(
+                          right: 10,
+                          bottom: 10,
+                          width: screenWidth * 0.1,
+                          height: screenHeight * 0.05,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.3),
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Center(
+                              child: SvgPicture.asset(
+                                'assets/images/expand.svg',
+                                color: Colors.white.withOpacity(0.5),
+                                height: 25,
+                                width: 25,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -221,19 +281,43 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                buildCategoryBox(context, 'Anxiety', AppColors.purple,
-                    screenWidth, screenHeight),
-                buildCategoryBox(context, 'Apologies', AppColors.blue,
-                    screenWidth, screenHeight),
+                FadeTransition(
+                  opacity: _fadeAnimation,
+                  child: SlideTransition(
+                    position: _slideAnimation1,
+                    child: buildCategoryBox(context, 'Anxiety',
+                        AppColors.purple, screenWidth, screenHeight),
+                  ),
+                ),
+                FadeTransition(
+                  opacity: _fadeAnimation,
+                  child: SlideTransition(
+                    position: _slideAnimation2,
+                    child: buildCategoryBox(context, 'Apologies',
+                        AppColors.blue, screenWidth, screenHeight),
+                  ),
+                ),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                buildCategoryBox(context, 'Happiness', AppColors.pink,
-                    screenWidth, screenHeight),
-                buildCategoryBox(context, 'Secret Wishes', AppColors.teal,
-                    screenWidth, screenHeight),
+                FadeTransition(
+                  opacity: _fadeAnimation,
+                  child: SlideTransition(
+                    position: _slideAnimation1,
+                    child: buildCategoryBox(context, 'Happiness',
+                        AppColors.pink, screenWidth, screenHeight),
+                  ),
+                ),
+                FadeTransition(
+                  opacity: _fadeAnimation,
+                  child: SlideTransition(
+                    position: _slideAnimation2,
+                    child: buildCategoryBox(context, 'Secret Wishes',
+                        AppColors.teal, screenWidth, screenHeight),
+                  ),
+                ),
               ],
             )
           ],
