@@ -187,6 +187,10 @@ class _HomePageState extends State<HomePage>
                     );
                   },
                   child: Container(
+                    width: screenWidth * 0.9,
+                    constraints: BoxConstraints(
+                      minHeight: screenHeight * 0.23,
+                    ),
                     decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
@@ -201,8 +205,6 @@ class _HomePageState extends State<HomePage>
                           image: AssetImage(_imagePath),
                           fit: BoxFit.cover,
                         )),
-                    height: screenHeight * 0.25,
-                    width: screenWidth * 0.9,
                     child: Stack(
                       children: [
                         Container(
@@ -218,45 +220,51 @@ class _HomePageState extends State<HomePage>
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Center(
-                                child: Text(
-                                  textAlign: TextAlign.center,
-                                  '"$_quote"',
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize
+                                  .min, // Shrink-wrap the column to its children.
+                              crossAxisAlignment: CrossAxisAlignment
+                                  .center, // Center the children horizontally.
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Center(
+                                  child: Text(
+                                    textAlign: TextAlign.center,
+                                    '"$_quote"',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      shadows: [
+                                        Shadow(
+                                          offset: Offset(0, 2),
+                                          blurRadius: 3.0,
+                                          color: Color.fromARGB(150, 0, 0, 0),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  '-$_author-',
                                   style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white70,
+                                    fontSize: 16,
                                     shadows: [
                                       Shadow(
-                                        offset: Offset(0, 2),
-                                        blurRadius: 3.0,
+                                        offset: Offset(0, 1),
+                                        blurRadius: 2.0,
                                         color: Color.fromARGB(150, 0, 0, 0),
                                       ),
                                     ],
                                   ),
                                 ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                '-$_author-',
-                                style: const TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 16,
-                                  shadows: [
-                                    Shadow(
-                                      offset: Offset(0, 1),
-                                      blurRadius: 2.0,
-                                      color: Color.fromARGB(150, 0, 0, 0),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                         Positioned(
