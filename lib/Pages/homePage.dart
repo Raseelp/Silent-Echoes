@@ -1,13 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:silent_echoes/Pages/categoryPage.dart';
 import 'package:silent_echoes/Pages/fullScreeenImage.dart';
 import 'package:silent_echoes/Widgets/category_cards.dart';
 import 'package:silent_echoes/util/appColors.dart';
-import 'dart:convert'; // For json decoding
 import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
