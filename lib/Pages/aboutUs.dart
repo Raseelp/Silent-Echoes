@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:silent_echoes/Pages/categoryPage.dart';
 import 'package:silent_echoes/util/appColors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AboutUs extends StatelessWidget {
   final Color categoryColor;
@@ -11,6 +12,17 @@ class AboutUs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
+
+    Future<void> _launchURL(String url) async {
+      final Uri uri = Uri.parse(url); // Convert string URL to Uri
+
+      if (await canLaunchUrl(uri)) {
+        // Use canLaunchUrl
+        await launchUrl(uri); // Use launchUrl
+      } else {
+        throw 'Could not launch $url';
+      }
+    }
 
     return WillPopScope(
       onWillPop: () async {
@@ -235,6 +247,19 @@ class AboutUs extends StatelessWidget {
                           ),
                           SizedBox(
                             height: screenHeight * 0.02,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              _launchURL('https://favqs.com/api_terms');
+                            },
+                            child: const Text(
+                              'Quotes provided by GetQuotes API',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 18,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
                           ),
                         ],
                       ),
