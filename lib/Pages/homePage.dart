@@ -85,17 +85,25 @@ class _HomePageState extends State<HomePage>
   }
 
   Future<void> _fetchQuote() async {
-    try {
-      final quoteData = await getQuote();
-      setState(() {
-        _quote = quoteData['quote']!;
-        _author = quoteData['author']!;
-      });
-    } catch (e) {
-      setState(() {
-        _quote = 'Could not fetch quote at this moment.';
-        _author = '';
-      });
+    bool quoteFound = false;
+    while (!quoteFound) {
+      try {
+        final quoteData = await getQuote();
+        final quote = quoteData['quote']!;
+        if (quote.length <= 200) {
+          setState(() {
+            _quote = quote;
+            _author = quoteData['author']!;
+          });
+          quoteFound = true;
+        }
+      } catch (e) {
+        setState(() {
+          _quote = 'Could not fetch quote at this moment.';
+          _author = '';
+        });
+        break;
+      }
     }
   }
 
@@ -184,10 +192,8 @@ class _HomePageState extends State<HomePage>
                     );
                   },
                   child: Container(
+                    height: screenHeight * 0.25,
                     width: screenWidth * 0.9,
-                    constraints: BoxConstraints(
-                      minHeight: screenHeight * 0.23,
-                    ),
                     decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
