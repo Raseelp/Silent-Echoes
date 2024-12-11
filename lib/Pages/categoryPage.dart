@@ -140,7 +140,7 @@ class _CategoryPageState extends State<CategoryPage> {
           ReadMessageButtonText = 'Read Other’s Regrets';
           break;
         case 'Happiness':
-          ReadMessageButtonText = 'Read Other’s Smiles';
+          ReadMessageButtonText = 'Read Other’s    Smiles';
           break;
         default:
           ReadMessageButtonText = 'Read Other’s Dreams';

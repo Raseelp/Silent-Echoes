@@ -103,15 +103,15 @@ class _HomePageState extends State<HomePage>
   }
 
   Future<Map<String, String>> getQuote() async {
-    final url = Uri.parse('https://zenquotes.io/api/random');
+    final url = Uri.parse('https://favqs.com/api/qotd'); // Updated API endpoint
 
     try {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        final quote = data[0]['q'];
-        final author = data[0]['a'];
+        final quote = data['quote']['body'];
+        final author = data['quote']['author'];
         return {'quote': quote, 'author': author};
       } else {
         throw Exception('Failed to load quote');
@@ -214,8 +214,8 @@ class _HomePageState extends State<HomePage>
                               begin: Alignment.center,
                               end: Alignment.topCenter,
                               colors: [
-                                Colors.lightBlue.withOpacity(0.2),
-                                Colors.lightBlue.withOpacity(0.2),
+                                Colors.lightBlue.withOpacity(1),
+                                Colors.lightBlue.withOpacity(1),
                               ],
                             ),
                           ),

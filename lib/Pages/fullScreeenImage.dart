@@ -78,15 +78,15 @@ class _FullScreenPageState extends State<FullScreenPage>
   }
 
   Future<Map<String, String>> getQuote() async {
-    final url = Uri.parse('https://zenquotes.io/api/random');
+    final url = Uri.parse('https://favqs.com/api/qotd'); // Updated API endpoint
 
     try {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        final quote = data[0]['q'];
-        final author = data[0]['a'];
+        final quote = data['quote']['body'];
+        final author = data['quote']['author'];
         return {'quote': quote, 'author': author};
       } else {
         throw Exception('Failed to load quote');
