@@ -187,6 +187,10 @@ class _HomePageState extends State<HomePage>
                     );
                   },
                   child: Container(
+                    width: screenWidth * 0.9,
+                    constraints: BoxConstraints(
+                      minHeight: screenHeight * 0.23,
+                    ),
                     decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
@@ -200,24 +204,14 @@ class _HomePageState extends State<HomePage>
                         image: DecorationImage(
                           image: AssetImage(_imagePath),
                           fit: BoxFit.cover,
+                          colorFilter: ColorFilter.mode(
+                            Colors.lightBlue
+                                .withOpacity(0.4), // Apply a slight blue tint
+                            BlendMode.overlay, // Blend the tint with the image
+                          ),
                         )),
-                    height: screenHeight * 0.25,
-                    width: screenWidth * 0.9,
                     child: Stack(
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            gradient: LinearGradient(
-                              begin: Alignment.center,
-                              end: Alignment.topCenter,
-                              colors: [
-                                Colors.lightBlue.withOpacity(1),
-                                Colors.lightBlue.withOpacity(1),
-                              ],
-                            ),
-                          ),
-                        ),
                         Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
@@ -229,7 +223,7 @@ class _HomePageState extends State<HomePage>
                                   '"$_quote"',
                                   style: const TextStyle(
                                     color: Colors.white,
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     shadows: [
                                       Shadow(

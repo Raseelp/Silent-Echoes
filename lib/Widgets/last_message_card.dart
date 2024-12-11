@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:silent_echoes/util/appColors.dart';
 
 class LastMessageCard extends StatelessWidget {
   final String category;
@@ -23,8 +25,9 @@ class LastMessageCard extends StatelessWidget {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
+          return Center(
+            child: LoadingAnimationWidget.waveDots(
+                color: AppColors.background, size: 50),
           );
         }
 
